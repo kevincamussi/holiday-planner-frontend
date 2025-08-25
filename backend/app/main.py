@@ -9,13 +9,15 @@ from .schemas import VacationCreate, VacationOut
 
 # create table with SQLite if they don't exist
 Base.metadata.create_all(bind=engine)
-
+    
 app = FastAPI(title= "Holidays Planner", version='1.0.0')
 
 # CORS: allows frontend (localhost:3000) calls API (localhost:8000)
+origins = ["http://localhost:5173"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173/"],
+    allow_origins= origins,
+    allow_credentials= True,
     allow_methods=["*"],
     allow_headers=["*"]
 )

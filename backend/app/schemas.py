@@ -9,8 +9,8 @@ class VacationBase(BaseModel):
     #  simple validation: start <= end
     @field_validator("end_date")
     @classmethod
-    def check_end_after_start(cls, v, values):
-        start = values.get("start_date")
+    def check_end_after_start(cls, v, info):
+        start = info.data.get("start_date")
         if start and v < start:
             raise ValueError("end_date cannot be before start_date")
         return v
