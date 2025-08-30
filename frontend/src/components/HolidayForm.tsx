@@ -20,27 +20,29 @@ const HolidayForm = ({ onAdd }: Props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
-      <input
-        placeholder="Employee Name"
-        value={employee_name}
-        onChange={(e) => setEmployee_name(e.target.value)}
-        required
-      />
-      <input
-        type="date"
-        value={start}
-        onChange={(e) => setStart(e.target.value)}
-        required
-      />
-      <input
-        type="date"
-        value={end}
-        onChange={(e) => setEnd(e.target.value)}
-        required
-      />
-      <button type="submit">Adicionar</button>
-    </form>
+    <div className="flex items-center justify-center  bg-gray-100">
+      <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
+        <input
+          placeholder="Employee Name"
+          value={employee_name}
+          onChange={(e) => setEmployee_name(e.target.value)}
+          required
+        />
+        <input
+          type="date"
+          value={start}
+          onChange={(e) => setStart(e.target.value)}
+          required
+        />
+        <input
+          type="date"
+          value={end}
+          onChange={(e) => setEnd(e.target.value)}
+          required
+        />
+        <button type="submit">Adicionar</button>
+      </form>
+    </div>
   );
 };
 

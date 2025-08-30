@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getHolidays } from "../api/holidays";
 import type { Holiday } from "../api/holidays";
 import HolidayForm from "../components/HolidayForm";
-import { GanttChart } from "../components/GanttChart";
+import HolidayCalendar from "../components/HolidayCalendar";
 
 const Dashboard = () => {
   const [holidays, setHolidays] = useState<Holiday[]>([]);
@@ -20,7 +20,7 @@ const Dashboard = () => {
     <div>
       <h1>Holidays Calendar</h1>
       <HolidayForm onAdd={loadHolidays} />
-      <GanttChart holidays={holidays} />
+      <HolidayCalendar holidays={holidays} />
     </div>
   );
 };
