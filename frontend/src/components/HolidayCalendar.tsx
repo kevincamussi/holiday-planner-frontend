@@ -1,53 +1,4 @@
-// import { useEffect, useRef } from "react";
-// import { gantt } from "dhtmlx-gantt";
-// // import "/css/dhtmlxgantt.css";
-// import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
-
-// import type { Holiday } from "../api/holidays";
-
-// interface Props {
-//   holidays: Holiday[];
-// }
-
-// export const GanttChart = ({ holidays }: Props) => {
-//   //   const tasks = holidays.map((h) => ({
-//   //     id: String(h.id),
-//   //     name: h.employee_name,
-//   //     start: h.start_date,
-//   //     end: h.end_date,
-//   //     progress: 100,
-//   //   }));
-
-//   const ganttContainer = useRef<HTMLDivElement>(null);
-
-//   useEffect(() => {
-//     if (!ganttContainer.current) return;
-
-//     gantt.init(ganttContainer.current);
-
-//     gantt.clearAll();
-
-//     gantt.parse({
-//       data: holidays.map((h) => ({
-//         id: h.id,
-//         name: h.employee_name,
-//         start_date: h.start_date,
-//         end_date: h.end_date,
-//         progress: 1,
-//       })),
-//       links: [],
-//     });
-
-//     gantt.render();
-//   }, [holidays]);
-
-//   return (
-//     <div ref={ganttContainer} style={{ width: "100%", height: "600px" }} />
-//   );
-// };
 import { useState, useMemo } from "react";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
 import type { Holiday } from "../api/holidays";
 
 interface Props {
@@ -56,6 +7,8 @@ interface Props {
 
 const HolidayCalendar = ({ holidays }: Props) => {
   const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const daysMap = useMemo(() => {
     const map = new Map<string, Holiday[]>();
@@ -71,36 +24,91 @@ const HolidayCalendar = ({ holidays }: Props) => {
     return map;
   }, [holidays]);
 
-  const getColorClass = (day: Date) => {
+  const monthDays = useMemo(() => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const days: Date[] = [];
+    for (let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) {
+      days.push(new Date(d));
+    }
+    return days;
+  }, [currentDate]);
+
+  const getDayColor = (day: Date) => {
     const key = day.toDateString();
     const off = daysMap.get(key)?.length || 0;
-    if (off === 0) return "";
+
+    // prioridade: selecionado > hover > feriado
+    if (selectedDay && day.toDateString() === selectedDay.toDateString()) {
+      return "bg-blue-500 text-white";
+    }
+    if (hoveredDay && day.toDateString() === hoveredDay.toDateString()) {
+      return "bg-gray-300";
+    }
+
+    if (off === 0) return "bg-white";
     if (off === 1) return "bg-red-400 text-white";
     if (off <= 3) return "bg-yellow-400 text-black";
     return "bg-green-400 text-white";
   };
 
+  const prevMonth = () =>
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
+    );
+  const nextMonth = () =>
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
+    );
+
   return (
-    <div className="flex flex-col items-center gap-4">
-      <DayPicker
-        mode="single"
-        onDayClick={setHoveredDay}
-        onDayHover={setHoveredDay}
-        modifiersClassNames={{
-          // aplica cores dinamicamente
-          custom: (day) => getColorClass(day),
-        }}
-        modifiers={{
-          custom: (day) => daysMap.has(day.toDateString()),
-        }}
-      />
-      {hoveredDay && daysMap.get(hoveredDay.toDateString()) && (
-        <div className="p-4 bg-gray-100 rounded shadow w-80 text-center">
-          <strong>{hoveredDay.toDateString()}</strong>
+    <div className="flex flex-col items-center gap-4 p-4">
+      <div className="flex justify-between w-full max-w-md mb-2">
+        <button className="px-4 py-2 bg-gray-200 rounded" onClick={prevMonth}>
+          {"<"}
+        </button>
+        <h2 className="text-lg font-bold">
+          {currentDate.toLocaleString("default", {
+            month: "long",
+            year: "numeric",
+          })}
+        </h2>
+        <button className="px-4 py-2 bg-gray-200 rounded" onClick={nextMonth}>
+          {">"}
+        </button>
+      </div>
+
+      <div className="grid grid-cols-7 gap-1 max-w-md">
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+          <div key={d} className="text-center font-bold">
+            {d}
+          </div>
+        ))}
+
+        {monthDays.map((day) => (
+          <div
+            key={day.toDateString()}
+            className={`w-16 h-16 flex items-center justify-center rounded cursor-pointer ${getDayColor(
+              day
+            )}`}
+            onMouseEnter={() => setHoveredDay(day)}
+            onMouseLeave={() => setHoveredDay(null)}
+            onClick={() => setSelectedDay(day)}
+          >
+            {day.getDate()}
+          </div>
+        ))}
+      </div>
+
+      {selectedDay && daysMap.get(selectedDay.toDateString()) && (
+        <div className="p-4 rounded shadow w-80 text-center bg-gray-100">
+          <strong>{selectedDay.toDateString()}</strong>
           <p>
             Off:{" "}
             {daysMap
-              .get(hoveredDay.toDateString())!
+              .get(selectedDay.toDateString())!
               .map((h) => h.employee_name)
               .join(", ")}
           </p>
