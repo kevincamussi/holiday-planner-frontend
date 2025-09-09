@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import type { Holiday } from "../api/holidays";
+import { useState, useMemo, useEffect } from "react";
+import { getHolidays, type Holiday } from "../api/holidays";
 
 interface Props {
   holidays: Holiday[];
@@ -9,13 +9,27 @@ const HolidayCalendar = ({ holidays }: Props) => {
   const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [employeesOff, setEmployeesOff] = useState<Holiday[]>([]);
+
+  useEffect(() => {
+    getHolidays().then(setEmployeesOff);
+  }, []);
+
+  const parseLocalDate = (dateStr: string) => {
+    const [year, month, day] = dateStr.split("-").map(Number);
+    return new Date(year, month - 1, day);
+  };
 
   const daysMap = useMemo(() => {
     const map = new Map<string, Holiday[]>();
     holidays.forEach((h) => {
-      const start = new Date(h.start_date);
-      const end = new Date(h.end_date);
-      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      const start = parseLocalDate(h.start_date);
+      const end = parseLocalDate(h.end_date);
+      for (
+        let d = new Date(start);
+        d <= end;
+        d = new Date(d.getTime() + 86400000)
+      ) {
         const key = d.toDateString();
         if (!map.has(key)) map.set(key, []);
         map.get(key)!.push(h);
@@ -40,18 +54,16 @@ const HolidayCalendar = ({ holidays }: Props) => {
     const key = day.toDateString();
     const off = daysMap.get(key)?.length || 0;
 
-    // prioridade: selecionado > hover > feriado
     if (selectedDay && day.toDateString() === selectedDay.toDateString()) {
       return "bg-blue-500 text-white";
     }
     if (hoveredDay && day.toDateString() === hoveredDay.toDateString()) {
-      return "bg-gray-300";
+      return "bg-blue-200";
     }
 
     if (off === 0) return "bg-white";
-    if (off === 1) return "bg-red-400 text-white";
-    if (off <= 3) return "bg-yellow-400 text-black";
-    return "bg-green-400 text-white";
+    if (off === 1) return " bg-yellow-400 text-black";
+    if (off <= 3) return "bg-red-400 text-white";
   };
 
   const prevMonth = () =>
@@ -63,26 +75,39 @@ const HolidayCalendar = ({ holidays }: Props) => {
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
     );
 
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const day = new Date(1970, 0, 5 + i); // it was a monday, just to start the week from monday
+    return day.toLocaleString("default", { weekday: "short" });
+  });
+
+  console.log(employeesOff);
+
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
-      <div className="flex justify-between w-full max-w-md mb-2">
-        <button className="px-4 py-2 bg-gray-200 rounded" onClick={prevMonth}>
+    <div className="flex flex-col items-center gap-4 py-4">
+      <div className="flex justify-between w-full  mb-2">
+        <button
+          className="px-4 py-2 bg-gray-200 rounded cursor-pointer active:bg-blue-500"
+          onClick={prevMonth}
+        >
           {"<"}
         </button>
-        <h2 className="text-lg font-bold">
+        <h2 className="text-lg font-bold capitalize">
           {currentDate.toLocaleString("default", {
             month: "long",
             year: "numeric",
           })}
         </h2>
-        <button className="px-4 py-2 bg-gray-200 rounded" onClick={nextMonth}>
+        <button
+          className="px-4 py-2 bg-gray-200 rounded cursor-pointer active:bg-blue-500"
+          onClick={nextMonth}
+        >
           {">"}
         </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 max-w-md">
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-          <div key={d} className="text-center font-bold">
+      <div className="grid grid-cols-7 gap-1 ">
+        {weekDays.map((d) => (
+          <div key={d} className="text-center font-bold capitalize">
             {d}
           </div>
         ))}
@@ -90,7 +115,7 @@ const HolidayCalendar = ({ holidays }: Props) => {
         {monthDays.map((day) => (
           <div
             key={day.toDateString()}
-            className={`w-16 h-16 flex items-center justify-center rounded cursor-pointer ${getDayColor(
+            className={`w-26 h-26 flex items-center justify-center rounded cursor-pointer ${getDayColor(
               day
             )}`}
             onMouseEnter={() => setHoveredDay(day)}

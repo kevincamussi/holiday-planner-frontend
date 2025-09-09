@@ -1,7 +1,7 @@
 from datetime import date
 from pydantic import BaseModel, ConfigDict, field_validator
 
-class VacationBase(BaseModel):
+class HolidayBase(BaseModel):
     employee_name: str
     start_date: date
     end_date: date
@@ -15,9 +15,9 @@ class VacationBase(BaseModel):
             raise ValueError("end_date cannot be before start_date")
         return v
     
-class VacationCreate(VacationBase):
+class HolidayCreate(HolidayBase):
     pass
 
-class VacationOut(VacationBase):
-    id: int
+class HolidayOut(HolidayBase):
+    id: str
     model_config = ConfigDict(from_attributes=True)  # convert ORM → Pydantic

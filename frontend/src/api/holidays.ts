@@ -3,7 +3,7 @@ import axios from "axios";
 const API_URL = "http://127.0.0.1:8000";
 
 export interface Holiday {
-  id: number;
+  id: string;
   employee_name: string;
   start_date: string;
   end_date: string;
@@ -19,6 +19,6 @@ export const createHoliday = async (holiday: Omit<Holiday, "id">) => {
   return res.data;
 };
 
-export const deleteHoliday = async (id: number) => {
+export const deleteHoliday = async (id: string) => {
   await axios.delete(`${API_URL}/holidays/${id}`);
 };
