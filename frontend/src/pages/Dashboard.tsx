@@ -20,7 +20,7 @@ const Dashboard = () => {
       <div className="w-full max-w-3/4 ">
         <h1 className="text-3xl font-bold mb-6">Holidays Calendar</h1>
         <HolidayForm onAdd={loadHolidays} />
-        <HolidayCalendar holidays={holidays} />
+        <HolidayCalendar holidays={holidays} onDelete={loadHolidays} />
       </div>
     </div>
   );

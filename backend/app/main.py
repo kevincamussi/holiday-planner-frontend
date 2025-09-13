@@ -36,6 +36,18 @@ async def create_holiday(holiday: HolidayCreate):
         end_date=holiday.end_date
     )
 
+@app.delete("/holidays/{holiday_id}")
+async def delete_holiday(holiday_id: str):
+    try:
+        oid = ObjectId(holiday_id)
+    except: 
+        raise HTTPException(status_code=404, detail="Invalid ID format")
+    
+    result = await holidays_collection.delete_one({"_id": oid})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Holiday not found")
+    return {"message": "Holiday deleted"}
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],

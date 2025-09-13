@@ -1,20 +1,21 @@
 import { useState, useMemo, useEffect } from "react";
-import { getHolidays, type Holiday } from "../api/holidays";
+import { deleteHoliday, getHolidays, type Holiday } from "../api/holidays";
 import Modal from "./Modal";
 
 interface Props {
   holidays: Holiday[];
+  onDelete: () => void;
 }
 
-const HolidayCalendar = ({ holidays }: Props) => {
+const HolidayCalendar = ({ holidays, onDelete }: Props) => {
   const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [employeesOff, setEmployeesOff] = useState<Holiday[]>([]);
+  // const [employeesOff, setEmployeesOff] = useState<Holiday[]>([]);
 
-  useEffect(() => {
-    getHolidays().then(setEmployeesOff);
-  }, []);
+  // useEffect(() => {
+  //   getHolidays().then(setEmployeesOff);
+  // }, []);
 
   const parseLocalDate = (dateStr: string) => {
     const [year, month, day] = dateStr.split("-").map(Number);
@@ -81,8 +82,10 @@ const HolidayCalendar = ({ holidays }: Props) => {
     return day.toLocaleString("default", { weekday: "short" });
   });
 
-  console.log(employeesOff);
-
+  const handleDelete = async (id: string) => {
+    await deleteHoliday(id);
+    onDelete();
+  };
   return (
     <div className="flex justify-between  w-full py-6 px-10 ">
       <div>
@@ -134,13 +137,15 @@ const HolidayCalendar = ({ holidays }: Props) => {
         {selectedDay && daysMap.get(selectedDay.toDateString()) && (
           <div className="p-4 mt-3 rounded shadow w-80 text-center bg-gray-100">
             <strong>{selectedDay.toDateString()}</strong>
-            <p>
-              Off:{" "}
-              {daysMap
-                .get(selectedDay.toDateString())!
-                .map((h) => h.employee_name)
-                .join(", ")}
-            </p>
+            <ul>
+              {daysMap.get(selectedDay.toDateString())!.map((h) => (
+                <li key={h.id}>
+                  <span>{h.employee_name}</span>
+                  <button onClick={() => handleDelete(h.id)}>Delete</button>
+                </li>
+              ))}
+            </ul>
+            <p>Off: </p>
             <Modal isModalOpen={true} />
           </div>
         )}
