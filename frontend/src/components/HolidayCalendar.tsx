@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { getHolidays, type Holiday } from "../api/holidays";
+import Modal from "./Modal";
 
 interface Props {
   holidays: Holiday[];
@@ -83,62 +84,67 @@ const HolidayCalendar = ({ holidays }: Props) => {
   console.log(employeesOff);
 
   return (
-    <div className="flex flex-col items-center gap-4 py-4">
-      <div className="flex justify-between w-full  mb-2">
-        <button
-          className="px-4 py-2 bg-gray-200 rounded cursor-pointer active:bg-blue-500"
-          onClick={prevMonth}
-        >
-          {"<"}
-        </button>
-        <h2 className="text-lg font-bold capitalize">
-          {currentDate.toLocaleString("default", {
-            month: "long",
-            year: "numeric",
-          })}
-        </h2>
-        <button
-          className="px-4 py-2 bg-gray-200 rounded cursor-pointer active:bg-blue-500"
-          onClick={nextMonth}
-        >
-          {">"}
-        </button>
-      </div>
-
-      <div className="grid grid-cols-7 gap-1 ">
-        {weekDays.map((d) => (
-          <div key={d} className="text-center font-bold capitalize">
-            {d}
-          </div>
-        ))}
-
-        {monthDays.map((day) => (
-          <div
-            key={day.toDateString()}
-            className={`w-26 h-26 flex items-center justify-center rounded cursor-pointer ${getDayColor(
-              day
-            )}`}
-            onMouseEnter={() => setHoveredDay(day)}
-            onMouseLeave={() => setHoveredDay(null)}
-            onClick={() => setSelectedDay(day)}
+    <div className="flex justify-between  w-full py-6 px-10 ">
+      <div>
+        <div className="flex justify-between w-full mb-2">
+          <button
+            className="px-4 py-2 bg-gray-200 rounded cursor-pointer active:bg-blue-500"
+            onClick={prevMonth}
           >
-            {day.getDate()}
-          </div>
-        ))}
+            {"<"}
+          </button>
+          <h2 className="text-lg font-bold capitalize">
+            {currentDate.toLocaleString("default", {
+              month: "long",
+              year: "numeric",
+            })}
+          </h2>
+          <button
+            className="px-4 py-2 bg-gray-200 rounded cursor-pointer active:bg-blue-500"
+            onClick={nextMonth}
+          >
+            {">"}
+          </button>
+        </div>
+
+        <div className="grid grid-cols-7  gap-1 ">
+          {weekDays.map((d) => (
+            <div key={d} className="text-center font-bold capitalize">
+              {d}
+            </div>
+          ))}
+
+          {monthDays.map((day) => (
+            <div
+              key={day.toDateString()}
+              className={`w-26 h-26 flex items-center justify-center rounded cursor-pointer ${getDayColor(
+                day
+              )}`}
+              onMouseEnter={() => setHoveredDay(day)}
+              onMouseLeave={() => setHoveredDay(null)}
+              onClick={() => setSelectedDay(day)}
+            >
+              {day.getDate()}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {selectedDay && daysMap.get(selectedDay.toDateString()) && (
-        <div className="p-4 rounded shadow w-80 text-center bg-gray-100">
-          <strong>{selectedDay.toDateString()}</strong>
-          <p>
-            Off:{" "}
-            {daysMap
-              .get(selectedDay.toDateString())!
-              .map((h) => h.employee_name)
-              .join(", ")}
-          </p>
-        </div>
-      )}
+      <div>
+        {selectedDay && daysMap.get(selectedDay.toDateString()) && (
+          <div className="p-4 mt-3 rounded shadow w-80 text-center bg-gray-100">
+            <strong>{selectedDay.toDateString()}</strong>
+            <p>
+              Off:{" "}
+              {daysMap
+                .get(selectedDay.toDateString())!
+                .map((h) => h.employee_name)
+                .join(", ")}
+            </p>
+            <Modal isModalOpen={true} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
