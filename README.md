@@ -17,6 +17,7 @@ deactivate - deactivate the ambient
 pip install -r requirements.txt - install the dependencies from the requirements.txt
 
 uvicorn app.main:app --reload - execute backend server
+main folder uvicorn backend.app.main:app --reload
 
 Frontend:
 

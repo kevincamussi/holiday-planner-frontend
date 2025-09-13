@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from .schemas import HolidayCreate, HolidayOut
+from .models.holidays import HolidayCreate, HolidayOut
 from .database import holidays_collection
 from bson import ObjectId
 from fastapi.middleware.cors import CORSMiddleware
