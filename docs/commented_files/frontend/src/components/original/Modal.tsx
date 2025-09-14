@@ -1,6 +1,3 @@
-/**
- * Simple modal placeholder. Extend as needed.
- */
 type Props = {
   isModalOpen: boolean;
 };

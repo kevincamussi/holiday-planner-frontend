@@ -1,7 +1,3 @@
-/**
- * Dashboard: main page controlling holidays state.
- */
-
 import { useEffect, useState } from "react";
 import { getHolidays, type Holiday } from "../api/holidays";
 import HolidayForm from "../components/HolidayForm";

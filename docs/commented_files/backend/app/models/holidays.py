@@ -1,15 +1,15 @@
-"""
-Pydantic models for holidays.
-"""
-
 from datetime import date
 from pydantic import BaseModel, ConfigDict, field_validator
 
 class HolidayBase(BaseModel):
+    """
+    Base Pydantic model for Holiday validation and serialization.
+    """
     employee_name: str
     start_date: date
     end_date: date
 
+        # Validation: end_date must be >= start_date
     @field_validator("end_date")
     @classmethod
     def check_end_after_start(cls, v, info):
@@ -17,10 +17,10 @@ class HolidayBase(BaseModel):
         if start and v < start:
             raise ValueError("end_date cannot be before start_date")
         return v
-
+    
 class HolidayCreate(HolidayBase):
     pass
 
 class HolidayOut(HolidayBase):
     id: str
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True)  # convert ORM → Pydantic

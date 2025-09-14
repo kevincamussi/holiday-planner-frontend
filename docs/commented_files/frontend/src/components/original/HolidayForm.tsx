@@ -1,7 +1,3 @@
-/**
- * Form to create a holiday. Calls onAdd after successful creation.
- */
-
 import React, { useState } from "react";
 import { createHoliday } from "../api/holidays";
 
@@ -45,6 +41,7 @@ const HolidayForm = ({ onAdd }: Props) => {
           min={"2000-12-31"}
           max={"9999-12-31"}
         />
+
         <input
           className="cursor-pointer flex-1 border rounded  text-center"
           type="date"

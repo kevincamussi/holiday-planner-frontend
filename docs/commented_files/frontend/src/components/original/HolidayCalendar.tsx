@@ -1,10 +1,5 @@
-/**
- * Calendar showing holidays for the current month.
- * Right-side panel shows details for selected day.
- */
-
-import { useState, useMemo } from "react";
-import { deleteHoliday, type Holiday } from "../api/holidays";
+import { useState, useMemo, useEffect } from "react";
+import { deleteHoliday, getHolidays, type Holiday } from "../api/holidays";
 import Modal from "./Modal";
 
 interface Props {
@@ -16,6 +11,11 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
   const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
+  // const [employeesOff, setEmployeesOff] = useState<Holiday[]>([]);
+
+  // useEffect(() => {
+  //   getHolidays().then(setEmployeesOff);
+  // }, []);
 
   const parseLocalDate = (dateStr: string) => {
     const [year, month, day] = dateStr.split("-").map(Number);
@@ -62,6 +62,7 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
     if (hoveredDay && day.toDateString() === hoveredDay.toDateString()) {
       return "bg-blue-200";
     }
+
     if (off === 0) return "bg-white";
     if (off === 1) return " bg-yellow-400 text-black";
     if (off <= 3) return "bg-red-400 text-white";
@@ -71,14 +72,13 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
     );
-
   const nextMonth = () =>
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
     );
 
   const weekDays = Array.from({ length: 7 }, (_, i) => {
-    const day = new Date(1970, 0, 5 + i);
+    const day = new Date(1970, 0, 5 + i); // it was a monday, just to start the week from monday
     return day.toLocaleString("default", { weekday: "short" });
   });
 
@@ -86,7 +86,6 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
     await deleteHoliday(id);
     onDelete();
   };
-
   return (
     <div className="flex justify-between  w-full py-6 px-10 ">
       <div>
@@ -140,15 +139,13 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
             <strong>{selectedDay.toDateString()}</strong>
             <ul>
               {daysMap.get(selectedDay.toDateString())!.map((h) => (
-                <li key={h.id} className="flex justify-between items-center bg-white p-2 rounded shadow-sm mt-2">
+                <li key={h.id}>
                   <span>{h.employee_name}</span>
-                  <button onClick={() => handleDelete(h.id)} className="px-2 py-1 text-sm bg-red-500 text-white rounded">
-                    Delete
-                  </button>
+                  <button onClick={() => handleDelete(h.id)}>Delete</button>
                 </li>
               ))}
             </ul>
-            <p className="mt-3">Off: </p>
+            <p>Off: </p>
             <Modal isModalOpen={true} />
           </div>
         )}
