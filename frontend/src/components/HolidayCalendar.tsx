@@ -5,7 +5,7 @@
 
 import { useState, useMemo } from "react";
 import { deleteHoliday, type Holiday } from "../api/holidays";
-import Modal from "./Modal";
+import Modal from "./Card";
 
 interface Props {
   holidays: Holiday[];
@@ -16,6 +16,7 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
   const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [isCardOpen, setIsCardOpen] = useState<boolean>(false);
 
   const parseLocalDate = (dateStr: string) => {
     const [year, month, day] = dateStr.split("-").map(Number);
@@ -82,10 +83,30 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
     return day.toLocaleString("default", { weekday: "short" });
   });
 
+  const toggleDay = (day: Date) => {
+    setSelectedDay(day);
+    const holidaysForDay = daysMap.get(day.toDateString()) ?? [];
+    setIsCardOpen(holidaysForDay.length > 0);
+  };
+
   const handleDelete = async (id: string) => {
     await deleteHoliday(id);
     onDelete();
+
+    if (selectedDay) {
+      const remaining = holidaysForDay.filter((h) => h.id !== id);
+
+      if (remaining.length === 0) {
+        setIsCardOpen(false);
+        setSelectedDay(null);
+      }
+    }
   };
+  const holidaysForDay = selectedDay
+    ? daysMap.get(selectedDay.toDateString()) ?? []
+    : [];
+
+  console.log(isCardOpen);
 
   return (
     <div className="flex justify-between  w-full py-6 px-10 ">
@@ -126,7 +147,7 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
               )}`}
               onMouseEnter={() => setHoveredDay(day)}
               onMouseLeave={() => setHoveredDay(null)}
-              onClick={() => setSelectedDay(day)}
+              onClick={() => toggleDay(day)}
             >
               {day.getDate()}
             </div>
@@ -134,22 +155,30 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
         </div>
       </div>
 
+      {/* Right panel with selected day */}
       <div>
-        {selectedDay && daysMap.get(selectedDay.toDateString()) && (
+        {isCardOpen && selectedDay && holidaysForDay.length > 0 && (
           <div className="p-4 mt-3 rounded shadow w-80 text-center bg-gray-100">
             <strong>{selectedDay.toDateString()}</strong>
-            <ul>
-              {daysMap.get(selectedDay.toDateString())!.map((h) => (
-                <li key={h.id} className="flex justify-between items-center bg-white p-2 rounded shadow-sm mt-2">
-                  <span>{h.employee_name}</span>
-                  <button onClick={() => handleDelete(h.id)} className="px-2 py-1 text-sm bg-red-500 text-white rounded">
+            {/* List of employees off on this day */}
+            <div>
+              {holidaysForDay.map((h) => (
+                <Modal
+                  key={h.id}
+                  isCardOpen={isCardOpen}
+                  employeeName={h.employee_name}
+                  startDate={h.start_date}
+                  endDate={h.end_date}
+                >
+                  <button
+                    onClick={() => handleDelete(h.id)}
+                    className="px-2 py-1 text-sm bg-red-500 text-white rounded"
+                  >
                     Delete
                   </button>
-                </li>
+                </Modal>
               ))}
-            </ul>
-            <p className="mt-3">Off: </p>
-            <Modal isModalOpen={true} />
+            </div>
           </div>
         )}
       </div>
