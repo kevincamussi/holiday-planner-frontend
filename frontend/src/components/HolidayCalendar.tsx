@@ -28,6 +28,8 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
     holidays.forEach((h) => {
       const start = parseLocalDate(h.start_date);
       const end = parseLocalDate(h.end_date);
+
+      
       for (
         let d = new Date(start);
         d <= end;
@@ -35,7 +37,14 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
       ) {
         const key = d.toDateString();
         if (!map.has(key)) map.set(key, []);
-        map.get(key)!.push(h);
+        // map.get(key)!.push(h);
+
+        const exists = map.get(key)!.some((x)=> x.id === h.id)
+
+        if(!exists) {
+          map.get(key)!.push(h)
+        }
+
       }
     });
     return map;
@@ -65,7 +74,8 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
     }
     if (off === 0) return "bg-white";
     if (off === 1) return " bg-yellow-400 text-black";
-    if (off <= 3) return "bg-red-400 text-white";
+    if (off === 2) return "bg-orange-400 text-white"
+    if (off >= 3) return "bg-red-400 text-white";
   };
 
   const prevMonth = () =>
@@ -102,9 +112,23 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
       }
     }
   };
-  const holidaysForDay = selectedDay
-    ? daysMap.get(selectedDay.toDateString()) ?? []
-    : [];
+
+  const holidaysForDay = selectedDay ? daysMap.get(selectedDay.toDateString()) ?? [] : [];
+
+  // const holidaysForDay = (() => {
+  //   if (!selectedDay) return [];
+  //   const list = daysMap.get(selectedDay.toDateString()) ?? [];
+  //   const seen = new Set<string>();
+  //   const out: Holiday[] = [];
+  //   for (const h of list) {
+  //     if (!seen.has(h.id)) {
+  //       seen.add(h.id);
+  //       out.push(h);
+  //     }
+  //   }
+  //   return out;
+  // })();
+
 
   console.log(isCardOpen);
 
