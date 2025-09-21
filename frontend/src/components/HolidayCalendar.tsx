@@ -115,20 +115,6 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
 
   const holidaysForDay = selectedDay ? daysMap.get(selectedDay.toDateString()) ?? [] : [];
 
-  // const holidaysForDay = (() => {
-  //   if (!selectedDay) return [];
-  //   const list = daysMap.get(selectedDay.toDateString()) ?? [];
-  //   const seen = new Set<string>();
-  //   const out: Holiday[] = [];
-  //   for (const h of list) {
-  //     if (!seen.has(h.id)) {
-  //       seen.add(h.id);
-  //       out.push(h);
-  //     }
-  //   }
-  //   return out;
-  // })();
-
 
   console.log(isCardOpen);
 
@@ -187,20 +173,15 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
             {/* List of employees off on this day */}
             <div>
               {holidaysForDay.map((h) => (
-                <Modal
+                <Modal 
                   key={h.id}
                   isCardOpen={isCardOpen}
                   employeeName={h.employee_name}
                   startDate={h.start_date}
                   endDate={h.end_date}
-                >
-                  <button
-                    onClick={() => handleDelete(h.id)}
-                    className="px-2 py-1 text-sm bg-red-500 text-white rounded"
-                  >
-                    Delete
-                  </button>
-                </Modal>
+                  onDelete={()=> handleDelete(h.id)}
+                />
+                
               ))}
             </div>
           </div>

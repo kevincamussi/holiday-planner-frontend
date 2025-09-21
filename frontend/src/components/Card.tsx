@@ -6,7 +6,7 @@ type Props = {
   employeeName: string;
   startDate: string;
   endDate: string;
-  children?: React.ReactNode;
+  onDelete: ()=> void;
 };
 
 const Modal = ({
@@ -14,16 +14,17 @@ const Modal = ({
   employeeName,
   startDate,
   endDate,
-  children,
+  onDelete,
 }: Props) => {
   return (
     <>
       {isCardOpen && (
-        <div>
+        <div className="border my-4 rounded-2xl flex flex-col  items-center justify-center text-center gap-2 p-2">
           <p>{employeeName}</p>
           <p>{startDate}</p>
           <p>{endDate}</p>
-          <div className="mt-4 flex gap-2">{children}</div>
+          <button onClick={onDelete} className="px-2 py-1 text-sm bg-red-500 hover:bg-red-300 text-white rounded cursor-pointer">Delete</button>
+          {/* <div className="mt-4 flex gap-2">{children}</div> */}
         </div>
       )}
     </>
