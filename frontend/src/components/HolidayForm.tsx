@@ -30,7 +30,7 @@ const HolidayForm = ({ onAdd }: Props) => {
         onSubmit={handleSubmit}
       >
         <input
-          className="flex-1 border rounded text-center"
+          className="flex-1 border rounded text-center capitalize"
           placeholder="Employee Name"
           value={employee_name}
           onChange={(e) => setEmployee_name(e.target.value)}
@@ -46,7 +46,7 @@ const HolidayForm = ({ onAdd }: Props) => {
           max={"9999-12-31"}
         />
         <input
-          className="cursor-pointer flex-1 border rounded  text-center"
+          className="cursor-pointer flex-1 border rounded  "
           type="date"
           value={end}
           onChange={(e) => setEnd(e.target.value)}

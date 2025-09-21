@@ -5,6 +5,7 @@
 
 import { useState, useMemo } from "react";
 import { deleteHoliday, type Holiday } from "../api/holidays";
+import { formatLongDate } from "../utils/date";
 import Modal from "./Card";
 
 interface Props {
@@ -177,8 +178,8 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
                   key={h.id}
                   isCardOpen={isCardOpen}
                   employeeName={h.employee_name}
-                  startDate={h.start_date}
-                  endDate={h.end_date}
+                  startDate={formatLongDate(h.start_date)}
+                  endDate={formatLongDate(h.end_date)}
                   onDelete={()=> handleDelete(h.id)}
                 />
                 
