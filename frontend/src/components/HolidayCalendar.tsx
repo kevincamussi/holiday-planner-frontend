@@ -190,6 +190,7 @@ const daysMap = useMemo(() => {
                   key={h.id}
                   isCardOpen={isCardOpen}
                   employeeName={h.employee_name}
+                  department={h.department}
                   startDate={formatLongDate(h.start_date)}
                   endDate={formatLongDate(h.end_date)}
                   onDelete={()=> handleDelete(h.id)}

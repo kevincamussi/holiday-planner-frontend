@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, field_validator
 
 class HolidayBase(BaseModel):
     employee_name: str
+    department: str
     start_date: date
     end_date: date
 

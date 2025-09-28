@@ -5,6 +5,7 @@ const API_URL = "http://127.0.0.1:8000";
 export interface Holiday {
   id: string;
   employee_name: string;
+  department: string;
   start_date: string;
   end_date: string;
   days: string[]

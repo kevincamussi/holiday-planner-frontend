@@ -20,6 +20,7 @@ async def get_holidays():
         holidays.append(HolidayOut(
             id=str(h["_id"]),
             employee_name=h["employee_name"],
+            department=h["department"],
             start_date=h["start_date"],
             end_date=h["end_date"],
             days=h.get("days", [])
@@ -31,6 +32,7 @@ async def create_holiday(holiday: HolidayCreate):
     """Insert a new holiday and return it."""
     doc = {
         "employee_name": holiday.employee_name,
+        "department": holiday.department,
         "start_date": holiday.start_date.isoformat(),
         "end_date": holiday.end_date.isoformat(),
         "days": [

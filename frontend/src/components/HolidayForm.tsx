@@ -11,13 +11,15 @@ interface Props {
 
 const HolidayForm = ({ onAdd }: Props) => {
   const [employee_name, setEmployee_name] = useState("");
+  const [department, setDepartment] = useState("")
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await createHoliday({ employee_name, start_date: start, end_date: end });
+    await createHoliday({ employee_name, department, start_date: start, end_date: end });
     setEmployee_name("");
+    setDepartment("");
     setStart("");
     setEnd("");
     onAdd();
@@ -34,11 +36,17 @@ const HolidayForm = ({ onAdd }: Props) => {
           placeholder="Employee Name"
           value={employee_name}
           onChange={(e) =>{
-            const onlyLetter = e.target.value.replace(/[^A-Za-z\s]/g, "");
-             setEmployee_name(onlyLetter)
+            const onlyLetters = e.target.value.replace(/[^A-Za-z\s]/g, "");
+             setEmployee_name(onlyLetters)
           }}
           required
-          
+        />
+        <input
+          className="flex-1 border rounded text-center capitalize"
+          placeholder="Department"
+          value={department}
+          onChange={(e) =>setDepartment(e.target.value)}
+          required
         />
         <input
           className="cursor-pointer flex-1 border rounded text-center"
