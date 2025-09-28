@@ -7,6 +7,7 @@ export interface Holiday {
   employee_name: string;
   start_date: string;
   end_date: string;
+  days: string[]
 }
 
 export const getHolidays = async (): Promise<Holiday[]> => {

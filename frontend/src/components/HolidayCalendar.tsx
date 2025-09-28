@@ -19,37 +19,49 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isCardOpen, setIsCardOpen] = useState<boolean>(false);
 
-  const parseLocalDate = (dateStr: string) => {
-    const [year, month, day] = dateStr.split("-").map(Number);
-    return new Date(year, month - 1, day);
-  };
+  // const parseLocalDate = (dateStr: string) => {
+  //   const [year, month, day] = dateStr.split("-").map(Number);
+  //   return new Date(year, month - 1, day);
+  // };
 
-  const daysMap = useMemo(() => {
-    const map = new Map<string, Holiday[]>();
-    holidays.forEach((h) => {
-      const start = parseLocalDate(h.start_date);
-      const end = parseLocalDate(h.end_date);
+  // const daysMap = useMemo(() => {
+  //   const map = new Map<string, Holiday[]>();
+  //   holidays.forEach((h) => {
+  //     const start = parseLocalDate(h.start_date);
+  //     const end = parseLocalDate(h.end_date);
 
       
-      for (
-        let d = new Date(start);
-        d <= end;
-        d = new Date(d.getTime() + 86400000)
-      ) {
-        const key = d.toDateString();
-        if (!map.has(key)) map.set(key, []);
-        // map.get(key)!.push(h);
+  //     for (
+  //       let d = new Date(start);
+  //       d <= end;
+  //       d = new Date(d.getTime() + 86400000)
+  //     ) {
+  //       const key = d.toDateString();
+  //       if (!map.has(key)) map.set(key, []);
+  //       // map.get(key)!.push(h);
 
-        const exists = map.get(key)!.some((x)=> x.id === h.id)
+  //       const exists = map.get(key)!.some((x)=> x.id === h.id)
 
-        if(!exists) {
-          map.get(key)!.push(h)
-        }
+  //       if(!exists) {
+  //         map.get(key)!.push(h)
+  //       }
 
-      }
+  //     }
+  //   });
+  //   return map;
+  // }, [holidays]);
+const daysMap = useMemo(() => {
+  const map = new Map<string, Holiday[]>();
+  holidays.forEach((h) => {
+    h.days.forEach((dayStr) => {
+      const key = new Date(dayStr).toDateString();
+      if (!map.has(key)) map.set(key, []);
+      const exists = map.get(key)!.some((x) => x.id === h.id);
+      if (!exists) map.get(key)!.push(h);
     });
-    return map;
-  }, [holidays]);
+  });
+  return map;
+}, [holidays]);
 
   const monthDays = useMemo(() => {
     const year = currentDate.getFullYear();
