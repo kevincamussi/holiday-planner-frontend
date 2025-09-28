@@ -23,4 +23,5 @@ class HolidayCreate(HolidayBase):
 
 class HolidayOut(HolidayBase):
     id: str
+    days: list[str]
     model_config = ConfigDict(from_attributes=True)

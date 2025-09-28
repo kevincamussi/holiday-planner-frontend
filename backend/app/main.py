@@ -3,10 +3,11 @@ FastAPI application for managing holidays.
 """
 
 from fastapi import FastAPI, HTTPException
-from .models.holidays import HolidayCreate, HolidayOut
-from .database import holidays_collection
 from bson import ObjectId
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import timedelta
+from .models.holidays import HolidayCreate, HolidayOut
+from .database import holidays_collection
 
 app = FastAPI()
 
@@ -21,6 +22,7 @@ async def get_holidays():
             employee_name=h["employee_name"],
             start_date=h["start_date"],
             end_date=h["end_date"],
+            days=h.get("days", [])
         ))
     return holidays
 
@@ -31,13 +33,15 @@ async def create_holiday(holiday: HolidayCreate):
         "employee_name": holiday.employee_name,
         "start_date": holiday.start_date.isoformat(),
         "end_date": holiday.end_date.isoformat(),
+        "days": [
+            (holiday.start_date + timedelta(days=i)).isoformat()
+            for i in range((holiday.end_date - holiday.start_date).days +1)
+        ]
     }
     result = await holidays_collection.insert_one(doc)
     return HolidayOut(
         id=str(result.inserted_id),
-        employee_name=holiday.employee_name,
-        start_date=holiday.start_date,
-        end_date=holiday.end_date,
+        **doc
     )
 
 @app.delete("/holidays/{holiday_id}")
