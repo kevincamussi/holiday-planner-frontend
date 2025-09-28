@@ -33,8 +33,12 @@ const HolidayForm = ({ onAdd }: Props) => {
           className="flex-1 border rounded text-center capitalize"
           placeholder="Employee Name"
           value={employee_name}
-          onChange={(e) => setEmployee_name(e.target.value)}
+          onChange={(e) =>{
+            const onlyLetter = e.target.value.replace(/[^A-Za-z\s]/g, "");
+             setEmployee_name(onlyLetter)
+          }}
           required
+          
         />
         <input
           className="cursor-pointer flex-1 border rounded text-center"
