@@ -6,3 +6,4 @@ export const formatLongDate = (dateStr: string | Date) => {
         year: "numeric"
     })
 }
+

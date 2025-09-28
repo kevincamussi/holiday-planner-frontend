@@ -2,7 +2,7 @@
 FastAPI application for managing holidays.
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from bson import ObjectId
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import timedelta
@@ -10,6 +10,19 @@ from .models.holidays import HolidayCreate, HolidayOut
 from .database import holidays_collection
 
 app = FastAPI()
+
+@app.get("/autocomplete")
+async def get_autocomplete(
+    field: str = Query(..., regex="^(employee_name|department)$")
+):  
+    """
+    Return distinct values from MongoDB for autocomplete fields.
+    Allowed fields: employee_name, department.
+    """
+
+    values = await holidays_collection.distinct(field)
+    return values
+
 
 @app.get("/holidays", response_model=list[HolidayOut])
 async def get_holidays():

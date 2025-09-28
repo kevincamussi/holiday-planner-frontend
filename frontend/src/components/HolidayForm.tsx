@@ -4,6 +4,7 @@
 
 import React, { useState } from "react";
 import { createHoliday } from "../api/holidays";
+import { useSuggestions } from "../hooks/useSuggestions";
 
 interface Props {
   onAdd: () => void;
@@ -15,6 +16,9 @@ const HolidayForm = ({ onAdd }: Props) => {
   const [start_date, setStart_date] = useState("");
   const [end_date, setEnd_date] = useState("");
 
+  const { options: employeeSuggestions, reload: reloadEmployees } = useSuggestions("employee_name");
+  const { options: departmentSuggestions, reload: reloadDepartments} = useSuggestions("department")
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await createHoliday({ employee_name, department, start_date, end_date });
@@ -22,6 +26,10 @@ const HolidayForm = ({ onAdd }: Props) => {
     setDepartment("");
     setStart_date("");
     setEnd_date("");
+
+    reloadEmployees();
+    reloadDepartments();
+
     onAdd();
   };
 
@@ -32,6 +40,10 @@ const HolidayForm = ({ onAdd }: Props) => {
         onSubmit={handleSubmit}
       >
         <input
+          list="employee-list"
+          autoComplete="off"
+          id="employeeName"
+          name="employeeName"
           className="flex-1 border rounded text-center capitalize"
           placeholder="Employee Name"
           value={employee_name}
@@ -41,14 +53,29 @@ const HolidayForm = ({ onAdd }: Props) => {
           }}
           required
         />
+        <datalist  id="employee-list">
+          {employeeSuggestions.map((name) => (
+            <option  key={name} value={name} />
+          ))}
+        </datalist>
         <input
+          list="department-list"
+          id="department"
+          name="department"
           className="flex-1 border rounded text-center capitalize"
           placeholder="Department"
           value={department}
           onChange={(e) =>setDepartment(e.target.value)}
           required
         />
+        <datalist id="department-list">
+          {departmentSuggestions.map((department)=>(
+            <option key={department} value={department} />
+          ))}
+        </datalist>
         <input
+          id="startDate"
+          name="startDate"
           className="cursor-pointer flex-1 border rounded text-center"
           type="date"
           value={start_date}
@@ -58,6 +85,8 @@ const HolidayForm = ({ onAdd }: Props) => {
           max={"9999-12-31"}
         />
         <input
+          id="endDate"
+          name="endDate"
           className="cursor-pointer flex-1 border rounded  "
           type="date"
           value={end_date}
