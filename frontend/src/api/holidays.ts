@@ -10,12 +10,13 @@ export interface Holiday {
   days: string[]
 }
 
+
 export const getHolidays = async (): Promise<Holiday[]> => {
   const res = await axios.get(`${API_URL}/holidays`);
   return res.data;
 };
 
-export const createHoliday = async (holiday: Omit<Holiday, "id">) => {
+export const createHoliday = async (holiday: Omit<Holiday, "id" | "days">) => {
   const res = await axios.post(`${API_URL}/holidays`, holiday);
   return res.data;
 };
