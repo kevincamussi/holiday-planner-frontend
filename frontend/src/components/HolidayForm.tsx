@@ -5,7 +5,8 @@
 import React, { useState } from "react";
 import { createHoliday } from "../api/holidays";
 import { useSuggestions } from "../hooks/useSuggestions";
-import { useDropdownSuggestions } from "../hooks/useDropDownSuggestions";
+import { useDropdownSuggestions } from "../hooks/useDropdownSuggestions";
+import { onlyLetters } from "../utils/onlyLetters";
 
 interface Props {
   onAdd: () => void;
@@ -48,7 +49,6 @@ const HolidayForm = ({ onAdd }: Props) => {
       >
         <div className="w-full relative">
           <input
-            list="employee-list"
             autoComplete="off"
             id="employeeName"
             name="employeeName"
@@ -56,8 +56,7 @@ const HolidayForm = ({ onAdd }: Props) => {
             placeholder="Employee Name"
             value={employee_name}
             onChange={(e) => {
-              const onlyLetters = e.target.value.replace(/[^A-Za-z\s]/g, "");
-              setEmployee_name(onlyLetters);
+              setEmployee_name(onlyLetters(e.target.value));
             }}
             onFocus={() => setIsOpen(true)}
             onBlur={() => setTimeout(() => setIsOpen(false), 100)}
@@ -80,22 +79,19 @@ const HolidayForm = ({ onAdd }: Props) => {
             </ul>
           )}
         </div>
+        <div className="relative w-full">
+          <input
+            autoComplete="off"
+            id="department"
+            name="department"
+            className="w-full px-2 border rounded text-center capitalize"
+            placeholder="Department"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            required
+          />
+        </div>
 
-        <input
-          list="department-list"
-          id="department"
-          name="department"
-          className="flex-1 border rounded text-center capitalize"
-          placeholder="Department"
-          value={department}
-          onChange={(e) => setDepartment(e.target.value)}
-          required
-        />
-        <datalist id="department-list">
-          {departmentSuggestions.map((department) => (
-            <option key={department} value={department} />
-          ))}
-        </datalist>
         <input
           id="startDate"
           name="startDate"
