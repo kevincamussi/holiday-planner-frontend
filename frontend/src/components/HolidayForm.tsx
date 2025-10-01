@@ -22,10 +22,18 @@ const HolidayForm = ({ onAdd }: Props) => {
     useSuggestions("employee_name");
   const { options: departmentSuggestions, reload: reloadDepartments } =
     useSuggestions("department");
-  const { isOpen, setIsOpen, filtered } = useDropdownSuggestions(
-    employeeSuggestions,
-    employee_name
-  );
+
+  const {
+    isOpen: isEmployeeListOpen,
+    setIsOpen: setIsEmployeeListOpen,
+    filtered: filteredEmployees,
+  } = useDropdownSuggestions(employeeSuggestions, employee_name);
+
+  const {
+    isOpen: isDepartmentListOpen,
+    setIsOpen: setIsDepartmentListOpen,
+    filtered: filteredDepartments,
+  } = useDropdownSuggestions(departmentSuggestions, department);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,19 +66,19 @@ const HolidayForm = ({ onAdd }: Props) => {
             onChange={(e) => {
               setEmployee_name(onlyLetters(e.target.value));
             }}
-            onFocus={() => setIsOpen(true)}
-            onBlur={() => setTimeout(() => setIsOpen(false), 100)}
+            onFocus={() => setIsEmployeeListOpen(true)}
+            onBlur={() => setTimeout(() => setIsEmployeeListOpen(false), 100)}
             required
           />
-          {isOpen && filtered.length > 0 && (
+          {isEmployeeListOpen && filteredEmployees.length > 0 && (
             <ul className="absolute w-full bg-white border rounded mt-1 shadow-lg max-h-40 overflow-y-auto z-10">
-              {filtered.map((name) => (
+              {filteredEmployees.map((name) => (
                 <li
                   key={name}
                   className="px-3 py-2 cursor-pointer bg- hover:bg-blue-100 text-center"
                   onMouseDown={() => {
                     setEmployee_name(name);
-                    setIsOpen(false);
+                    setIsEmployeeListOpen(false);
                   }}
                 >
                   {name}
@@ -87,9 +95,27 @@ const HolidayForm = ({ onAdd }: Props) => {
             className="w-full px-2 border rounded text-center capitalize"
             placeholder="Department"
             value={department}
-            onChange={(e) => setDepartment(e.target.value)}
+            onChange={(e) => setDepartment(onlyLetters(e.target.value))}
+            onFocus={() => setIsDepartmentListOpen(true)}
+            onBlur={() => setTimeout(() => setIsDepartmentListOpen(false), 100)}
             required
           />
+          {isDepartmentListOpen && filteredDepartments.length > 0 && (
+            <ul className="absolute w-full bg-white border rounded mt-1 shadow-lg max-h-40 overflow-y-auto z-10">
+              {filteredDepartments.map((department) => (
+                <li
+                  key={department}
+                  className="px-3 py-2 cursor-pointer bg- hover:bg-blue-100 text-center"
+                  onMouseDown={() => {
+                    setDepartment(department);
+                    setIsDepartmentListOpen(false);
+                  }}
+                >
+                  {department}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <input
