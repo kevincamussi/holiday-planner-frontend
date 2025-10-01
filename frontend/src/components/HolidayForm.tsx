@@ -50,78 +50,77 @@ const HolidayForm = ({ onAdd }: Props) => {
   };
 
   return (
-    <div className="flex  bg-gray-200 rounded">
-      <form
-        className="flex w-full p-4 items-center gap-4"
-        onSubmit={handleSubmit}
-      >
-        <div className="w-full relative">
-          <input
-            autoComplete="off"
-            id="employeeName"
-            name="employeeName"
-            className="w-full px-2 border rounded text-center capitalize"
-            placeholder="Employee Name"
-            value={employee_name}
-            onChange={(e) => {
-              setEmployee_name(onlyLetters(e.target.value));
-            }}
-            onFocus={() => setIsEmployeeListOpen(true)}
-            onBlur={() => setTimeout(() => setIsEmployeeListOpen(false), 100)}
-            required
-          />
-          {isEmployeeListOpen && filteredEmployees.length > 0 && (
-            <ul className="absolute w-full bg-white border rounded mt-1 shadow-lg max-h-40 overflow-y-auto z-10">
-              {filteredEmployees.map((name) => (
-                <li
-                  key={name}
-                  className="px-3 py-2 cursor-pointer bg- hover:bg-blue-100 text-center"
-                  onMouseDown={() => {
-                    setEmployee_name(name);
-                    setIsEmployeeListOpen(false);
-                  }}
-                >
-                  {name}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-        <div className="relative w-full">
-          <input
-            autoComplete="off"
-            id="department"
-            name="department"
-            className="w-full px-2 border rounded text-center capitalize"
-            placeholder="Department"
-            value={department}
-            onChange={(e) => setDepartment(onlyLetters(e.target.value))}
-            onFocus={() => setIsDepartmentListOpen(true)}
-            onBlur={() => setTimeout(() => setIsDepartmentListOpen(false), 100)}
-            required
-          />
-          {isDepartmentListOpen && filteredDepartments.length > 0 && (
-            <ul className="absolute w-full bg-white border rounded mt-1 shadow-lg max-h-40 overflow-y-auto z-10">
-              {filteredDepartments.map((department) => (
-                <li
-                  key={department}
-                  className="px-3 py-2 cursor-pointer bg- hover:bg-blue-100 text-center"
-                  onMouseDown={() => {
-                    setDepartment(department);
-                    setIsDepartmentListOpen(false);
-                  }}
-                >
-                  {department}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
+    <form
+      className="flex w-full p-4 items-center gap-4 bg-gray-200 rounded "
+      onSubmit={handleSubmit}
+    >
+      <div className="relative flex-1">
+        <input
+          autoComplete="off"
+          id="employeeName"
+          name="employeeName"
+          className="w-full text-center capitalize py-2 border rounded"
+          placeholder="Employee Name"
+          value={employee_name}
+          onChange={(e) => {
+            setEmployee_name(onlyLetters(e.target.value));
+          }}
+          onFocus={() => setIsEmployeeListOpen(true)}
+          onBlur={() => setTimeout(() => setIsEmployeeListOpen(false), 100)}
+          required
+        />
+        {isEmployeeListOpen && filteredEmployees.length > 0 && (
+          <ul className="absolute w-full bg-white border rounded mt-1 shadow-lg max-h-40 overflow-y-auto z-10">
+            {filteredEmployees.map((name) => (
+              <li
+                key={name}
+                className="py-2 cursor-pointer bg- hover:bg-blue-100 text-center"
+                onMouseDown={() => {
+                  setEmployee_name(name);
+                  setIsEmployeeListOpen(false);
+                }}
+              >
+                {name}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className="relative flex-1 ">
+        <input
+          autoComplete="off"
+          id="department"
+          name="department"
+          className="w-full py-2 border rounded text-center capitalize"
+          placeholder="Department"
+          value={department}
+          onChange={(e) => setDepartment(onlyLetters(e.target.value))}
+          onFocus={() => setIsDepartmentListOpen(true)}
+          onBlur={() => setTimeout(() => setIsDepartmentListOpen(false), 100)}
+          required
+        />
+        {isDepartmentListOpen && filteredDepartments.length > 0 && (
+          <ul className="absolute w-full bg-white border rounded mt-1 shadow-lg max-h-40 overflow-y-auto z-10">
+            {filteredDepartments.map((department) => (
+              <li
+                key={department}
+                className="py-2 cursor-pointer bg- hover:bg-blue-100 text-center"
+                onMouseDown={() => {
+                  setDepartment(department);
+                  setIsDepartmentListOpen(false);
+                }}
+              >
+                {department}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className="flex-1">
         <input
           id="startDate"
           name="startDate"
-          className="cursor-pointer flex-1 border rounded text-center"
+          className="cursor-pointer w-full  border rounded py-2 flex justify-center "
           type="date"
           value={start_date}
           onChange={(e) => setStart_date(e.target.value)}
@@ -129,10 +128,12 @@ const HolidayForm = ({ onAdd }: Props) => {
           min={"2000-12-31"}
           max={"9999-12-31"}
         />
+      </div>
+      <div className="flex-1">
         <input
           id="endDate"
           name="endDate"
-          className="cursor-pointer flex-1 border rounded  "
+          className="cursor-pointer w-full flex justify-center border rounded py-2"
           type="date"
           value={end_date}
           onChange={(e) => setEnd_date(e.target.value)}
@@ -140,14 +141,16 @@ const HolidayForm = ({ onAdd }: Props) => {
           min={"2000-12-31"}
           max={"9999-12-31"}
         />
+      </div>
+      <div className="flex-1">
         <button
-          className="flex-1 border rounded bg-gray-300 cursor-pointer hover:bg-blue-500"
+          className=" w-full border rounded bg-gray-300 cursor-pointer hover:bg-blue-500 text-center py-2"
           type="submit"
         >
           Add holiday
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 };
 
