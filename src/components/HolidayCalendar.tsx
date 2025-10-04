@@ -6,7 +6,7 @@
 import { useState, useMemo } from "react";
 import { deleteHoliday, type Holiday } from "../api/holidays";
 import { formatLongDate } from "../utils/date";
-import Modal from "./Card";
+import Card from "./Card";
 
 interface Props {
   holidays: Holiday[];
@@ -30,7 +30,6 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
   //     const start = parseLocalDate(h.start_date);
   //     const end = parseLocalDate(h.end_date);
 
-      
   //     for (
   //       let d = new Date(start);
   //       d <= end;
@@ -50,18 +49,18 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
   //   });
   //   return map;
   // }, [holidays]);
-const daysMap = useMemo(() => {
-  const map = new Map<string, Holiday[]>();
-  holidays.forEach((h) => {
-    h.days.forEach((dayStr) => {
-      const key = new Date(dayStr).toDateString();
-      if (!map.has(key)) map.set(key, []);
-      const exists = map.get(key)!.some((x) => x.id === h.id);
-      if (!exists) map.get(key)!.push(h);
+  const daysMap = useMemo(() => {
+    const map = new Map<string, Holiday[]>();
+    holidays.forEach((h) => {
+      h.days.forEach((dayStr) => {
+        const key = new Date(dayStr).toDateString();
+        if (!map.has(key)) map.set(key, []);
+        const exists = map.get(key)!.some((x) => x.id === h.id);
+        if (!exists) map.get(key)!.push(h);
+      });
     });
-  });
-  return map;
-}, [holidays]);
+    return map;
+  }, [holidays]);
 
   const monthDays = useMemo(() => {
     const year = currentDate.getFullYear();
@@ -87,7 +86,7 @@ const daysMap = useMemo(() => {
     }
     if (off === 0) return "bg-white";
     if (off === 1) return " bg-yellow-400 text-black";
-    if (off === 2) return "bg-orange-400 text-white"
+    if (off === 2) return "bg-orange-400 text-white";
     if (off >= 3) return "bg-red-400 text-white";
   };
 
@@ -126,8 +125,9 @@ const daysMap = useMemo(() => {
     }
   };
 
-  const holidaysForDay = selectedDay ? daysMap.get(selectedDay.toDateString()) ?? [] : [];
-
+  const holidaysForDay = selectedDay
+    ? daysMap.get(selectedDay.toDateString()) ?? []
+    : [];
 
   console.log(isCardOpen);
 
@@ -186,16 +186,15 @@ const daysMap = useMemo(() => {
             {/* List of employees off on this day */}
             <div>
               {holidaysForDay.map((h) => (
-                <Modal 
+                <Card
                   key={h.id}
                   isCardOpen={isCardOpen}
                   employeeName={h.employee_name}
                   department={h.department}
                   startDate={formatLongDate(h.start_date)}
                   endDate={formatLongDate(h.end_date)}
-                  onDelete={()=> handleDelete(h.id)}
+                  onDelete={() => handleDelete(h.id)}
                 />
-                
               ))}
             </div>
           </div>

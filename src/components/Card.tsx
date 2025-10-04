@@ -7,10 +7,10 @@ type Props = {
   department: string;
   startDate: string;
   endDate: string;
-  onDelete: ()=> void;
+  onDelete: () => void;
 };
 
-const Modal = ({
+const Card = ({
   isCardOpen,
   employeeName,
   department,
@@ -26,7 +26,12 @@ const Modal = ({
           <p className="capitalize">{`Department: ${department}`}</p>
           <p>{`From: ${startDate}`}</p>
           <p>{`To: ${endDate}`}</p>
-          <button onClick={onDelete} className="px-2 py-1 text-sm bg-red-500 hover:bg-red-300 text-white rounded cursor-pointer">Delete</button>
+          <button
+            onClick={onDelete}
+            className="px-2 py-1 text-sm bg-red-500 hover:bg-red-300 text-white rounded cursor-pointer"
+          >
+            Delete
+          </button>
           {/* <div className="mt-4 flex gap-2">{children}</div> */}
         </div>
       )}
@@ -34,4 +39,4 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default Card;
