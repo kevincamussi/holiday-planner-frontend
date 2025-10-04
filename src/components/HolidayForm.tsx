@@ -4,24 +4,25 @@
 
 import React, { useState } from "react";
 import { createHoliday } from "../api/holidays";
-import { useSuggestions } from "../hooks/useSuggestions";
+// import { useSuggestions } from "../hooks/useSuggestions";
 import { useDropdownSuggestions } from "../hooks/useDropdownSuggestions";
 import { onlyLetters } from "../utils/onlyLetters";
 
 interface Props {
   onAdd: () => void;
+  employeeSuggestions: string[];
+  departmentSuggestions: string[];
 }
 
-const HolidayForm = ({ onAdd }: Props) => {
+const HolidayForm = ({
+  onAdd,
+  employeeSuggestions,
+  departmentSuggestions,
+}: Props) => {
   const [employee_name, setEmployee_name] = useState("");
   const [department, setDepartment] = useState("");
   const [start_date, setStart_date] = useState("");
   const [end_date, setEnd_date] = useState("");
-
-  const { options: employeeSuggestions, reload: reloadEmployees } =
-    useSuggestions("employee_name");
-  const { options: departmentSuggestions, reload: reloadDepartments } =
-    useSuggestions("department");
 
   const {
     isOpen: isEmployeeListOpen,
@@ -42,10 +43,6 @@ const HolidayForm = ({ onAdd }: Props) => {
     setDepartment("");
     setStart_date("");
     setEnd_date("");
-
-    reloadEmployees();
-    reloadDepartments();
-
     onAdd();
   };
 

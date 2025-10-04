@@ -32,7 +32,6 @@ const Card = ({
           >
             Delete
           </button>
-          {/* <div className="mt-4 flex gap-2">{children}</div> */}
         </div>
       )}
     </>

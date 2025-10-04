@@ -6,49 +6,27 @@
 import { useState, useMemo } from "react";
 import { deleteHoliday, type Holiday } from "../api/holidays";
 import { formatLongDate } from "../utils/date";
+
 import Card from "./Card";
 
 interface Props {
   holidays: Holiday[];
   onDelete: () => void;
+  reloadEmployees: () => void;
+  reloadDepartments: () => void;
 }
 
-const HolidayCalendar = ({ holidays, onDelete }: Props) => {
+const HolidayCalendar = ({
+  holidays,
+  onDelete,
+  reloadEmployees,
+  reloadDepartments,
+}: Props) => {
   const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isCardOpen, setIsCardOpen] = useState<boolean>(false);
 
-  // const parseLocalDate = (dateStr: string) => {
-  //   const [year, month, day] = dateStr.split("-").map(Number);
-  //   return new Date(year, month - 1, day);
-  // };
-
-  // const daysMap = useMemo(() => {
-  //   const map = new Map<string, Holiday[]>();
-  //   holidays.forEach((h) => {
-  //     const start = parseLocalDate(h.start_date);
-  //     const end = parseLocalDate(h.end_date);
-
-  //     for (
-  //       let d = new Date(start);
-  //       d <= end;
-  //       d = new Date(d.getTime() + 86400000)
-  //     ) {
-  //       const key = d.toDateString();
-  //       if (!map.has(key)) map.set(key, []);
-  //       // map.get(key)!.push(h);
-
-  //       const exists = map.get(key)!.some((x)=> x.id === h.id)
-
-  //       if(!exists) {
-  //         map.get(key)!.push(h)
-  //       }
-
-  //     }
-  //   });
-  //   return map;
-  // }, [holidays]);
   const daysMap = useMemo(() => {
     const map = new Map<string, Holiday[]>();
     holidays.forEach((h) => {
@@ -113,7 +91,10 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
 
   const handleDelete = async (id: string) => {
     await deleteHoliday(id);
-    onDelete();
+    await onDelete();
+
+    reloadEmployees();
+    reloadDepartments();
 
     if (selectedDay) {
       const remaining = holidaysForDay.filter((h) => h.id !== id);
@@ -128,8 +109,6 @@ const HolidayCalendar = ({ holidays, onDelete }: Props) => {
   const holidaysForDay = selectedDay
     ? daysMap.get(selectedDay.toDateString()) ?? []
     : [];
-
-  console.log(isCardOpen);
 
   return (
     <div className="flex justify-between  w-full py-6 px-10 ">
