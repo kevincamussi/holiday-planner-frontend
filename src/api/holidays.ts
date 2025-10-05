@@ -1,6 +1,4 @@
-import axios from "axios";
-
-const API_URL = "http://127.0.0.1:8000";
+import API from "./axios";
 
 export interface Holiday {
   readonly id: string;
@@ -12,17 +10,17 @@ export interface Holiday {
 }
 
 export const getHolidays = async (): Promise<Holiday[]> => {
-  const res = await axios.get(`${API_URL}/holidays`);
+  const res = await API.get("/holidays");
   return res.data;
 };
 
 export const createHoliday = async (
   holiday: Omit<Holiday, "id" | "days">
 ): Promise<Holiday> => {
-  const res = await axios.post(`${API_URL}/holidays`, holiday);
+  const res = await API.post("/holidays", holiday);
   return res.data;
 };
 
 export const deleteHoliday = async (id: string) => {
-  await axios.delete(`${API_URL}/holidays/${id}`);
+  await API.delete(`/holidays/${id}`);
 };
