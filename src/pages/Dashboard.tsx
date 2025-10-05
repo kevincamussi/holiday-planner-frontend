@@ -4,8 +4,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { getHolidays, type Holiday } from "../api/holidays";
-import HolidayForm from "../components/HolidayForm";
-import HolidayCalendar from "../components/HolidayCalendar";
+import { HolidayForm, HolidayCalendar } from "../components";
 import { useSuggestions } from "../hooks/useSuggestions";
 
 const Dashboard = () => {
