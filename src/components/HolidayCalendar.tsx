@@ -3,17 +3,17 @@
  * Right-side panel shows details for selected day.
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { deleteHoliday, type Holiday } from "../api/holidays";
 import { formatLongDate } from "../utils/date";
 
 import Card from "./Card";
 
 interface Props {
-  holidays: Holiday[];
-  onDelete: () => void;
-  reloadEmployees: () => void;
-  reloadDepartments: () => void;
+  readonly holidays: Holiday[];
+  readonly onDelete: () => void;
+  readonly reloadEmployees: () => void;
+  readonly reloadDepartments: () => void;
 }
 
 const HolidayCalendar = ({
@@ -89,22 +89,25 @@ const HolidayCalendar = ({
     setIsCardOpen(holidaysForDay.length > 0);
   };
 
-  const handleDelete = async (id: string) => {
-    await deleteHoliday(id);
-    await onDelete();
+  const handleDelete = useCallback(
+    async (id: string) => {
+      await deleteHoliday(id);
+      await onDelete();
 
-    reloadEmployees();
-    reloadDepartments();
+      reloadEmployees();
+      reloadDepartments();
 
-    if (selectedDay) {
-      const remaining = holidaysForDay.filter((h) => h.id !== id);
+      if (selectedDay) {
+        const remaining = holidaysForDay.filter((h) => h.id !== id);
 
-      if (remaining.length === 0) {
-        setIsCardOpen(false);
-        setSelectedDay(null);
+        if (remaining.length === 0) {
+          setIsCardOpen(false);
+          setSelectedDay(null);
+        }
       }
-    }
-  };
+    },
+    [onDelete, reloadEmployees, reloadDepartments, selectedDay]
+  );
 
   const holidaysForDay = selectedDay
     ? daysMap.get(selectedDay.toDateString()) ?? []
@@ -168,10 +171,10 @@ const HolidayCalendar = ({
                 <Card
                   key={h.id}
                   isCardOpen={isCardOpen}
-                  employeeName={h.employee_name}
+                  employeeName={h.employeeName}
                   department={h.department}
-                  startDate={formatLongDate(h.start_date)}
-                  endDate={formatLongDate(h.end_date)}
+                  startDate={formatLongDate(h.startDate)}
+                  endDate={formatLongDate(h.endDate)}
                   onDelete={() => handleDelete(h.id)}
                 />
               ))}

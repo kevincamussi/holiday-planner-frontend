@@ -1,14 +1,14 @@
 /**
  * Simple modal placeholder. Extend as needed.
  */
-type Props = {
-  isCardOpen: boolean;
-  employeeName: string;
-  department: string;
-  startDate: string;
-  endDate: string;
-  onDelete: () => void;
-};
+interface Props {
+  readonly isCardOpen: boolean;
+  readonly employeeName: string;
+  readonly department: string;
+  readonly startDate: string;
+  readonly endDate: string;
+  readonly onDelete: () => void;
+}
 
 const Card = ({
   isCardOpen,

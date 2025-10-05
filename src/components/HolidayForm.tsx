@@ -9,9 +9,9 @@ import { useDropdownSuggestions } from "../hooks/useDropdownSuggestions";
 import { onlyLetters } from "../utils/onlyLetters";
 
 interface Props {
-  onAdd: () => void;
-  employeeSuggestions: string[];
-  departmentSuggestions: string[];
+  readonly onAdd: () => void;
+  readonly employeeSuggestions: string[];
+  readonly departmentSuggestions: string[];
 }
 
 const HolidayForm = ({
@@ -19,16 +19,16 @@ const HolidayForm = ({
   employeeSuggestions,
   departmentSuggestions,
 }: Props) => {
-  const [employee_name, setEmployee_name] = useState("");
+  const [employeeName, setEmployeeName] = useState("");
   const [department, setDepartment] = useState("");
-  const [start_date, setStart_date] = useState("");
-  const [end_date, setEnd_date] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const {
     isOpen: isEmployeeListOpen,
     setIsOpen: setIsEmployeeListOpen,
     filtered: filteredEmployees,
-  } = useDropdownSuggestions(employeeSuggestions, employee_name);
+  } = useDropdownSuggestions(employeeSuggestions, employeeName);
 
   const {
     isOpen: isDepartmentListOpen,
@@ -38,11 +38,11 @@ const HolidayForm = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await createHoliday({ employee_name, department, start_date, end_date });
-    setEmployee_name("");
+    await createHoliday({ employeeName, department, startDate, endDate });
+    setEmployeeName("");
     setDepartment("");
-    setStart_date("");
-    setEnd_date("");
+    setStartDate("");
+    setEndDate("");
     onAdd();
   };
 
@@ -58,9 +58,9 @@ const HolidayForm = ({
           name="employeeName"
           className="w-full text-center capitalize py-2 border rounded"
           placeholder="Employee Name"
-          value={employee_name}
+          value={employeeName}
           onChange={(e) => {
-            setEmployee_name(onlyLetters(e.target.value));
+            setEmployeeName(onlyLetters(e.target.value));
           }}
           onFocus={() => setIsEmployeeListOpen(true)}
           onBlur={() => setTimeout(() => setIsEmployeeListOpen(false), 100)}
@@ -73,7 +73,7 @@ const HolidayForm = ({
                 key={name}
                 className="py-2 cursor-pointer bg- hover:bg-blue-100 text-center"
                 onMouseDown={() => {
-                  setEmployee_name(name);
+                  setEmployeeName(name);
                   setIsEmployeeListOpen(false);
                 }}
               >
@@ -119,8 +119,8 @@ const HolidayForm = ({
           name="startDate"
           className="cursor-pointer w-full  border rounded py-2 flex justify-center "
           type="date"
-          value={start_date}
-          onChange={(e) => setStart_date(e.target.value)}
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
           required
           min={"2000-12-31"}
           max={"9999-12-31"}
@@ -132,8 +132,8 @@ const HolidayForm = ({
           name="endDate"
           className="cursor-pointer w-full flex justify-center border rounded py-2"
           type="date"
-          value={end_date}
-          onChange={(e) => setEnd_date(e.target.value)}
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
           required
           min={"2000-12-31"}
           max={"9999-12-31"}
