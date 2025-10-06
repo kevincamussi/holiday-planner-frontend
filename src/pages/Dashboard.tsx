@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { getHolidays, type Holiday } from "../api/holidays";
 import { HolidayForm, HolidayCalendar } from "../components";
 import { useSuggestions } from "../hooks/useSuggestions";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [holidays, setHolidays] = useState<Holiday[]>([]);
@@ -24,6 +25,13 @@ const Dashboard = () => {
     await Promise.all([reloadEmployees(), reloadDepartments()]);
   }, [loadHolidays, reloadEmployees, reloadDepartments]);
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   useEffect(() => {
     void loadAll();
   }, [loadAll]);
@@ -31,18 +39,28 @@ const Dashboard = () => {
   return (
     <div className="flex justify-center items-start min-h-screen bg-gray-200 p-4">
       <div className="w-full max-w-3/4 ">
-        <h1 className="text-3xl font-bold mb-6">Holidays Management</h1>
-        <HolidayForm
-          onAdd={loadAll}
-          employeeSuggestions={employeeSuggestions}
-          departmentSuggestions={departmentSuggestions}
-        />
-        <HolidayCalendar
-          holidays={holidays}
-          onDelete={loadAll}
-          reloadEmployees={reloadEmployees}
-          reloadDepartments={reloadDepartments}
-        />
+        <header className="flex justify-between px-10">
+          <h1 className="text-3xl font-bold mb-6">Holidays Management</h1>
+          <button
+            onClick={handleLogout}
+            className="border rounded-2xl px-4 border-red-500 bg-red-500 hover:bg-red-600 cursor-pointer  font-semibold transition-all text-white "
+          >
+            Logout
+          </button>
+        </header>
+        <main>
+          <HolidayForm
+            onAdd={loadAll}
+            employeeSuggestions={employeeSuggestions}
+            departmentSuggestions={departmentSuggestions}
+          />
+          <HolidayCalendar
+            holidays={holidays}
+            onDelete={loadAll}
+            reloadEmployees={reloadEmployees}
+            reloadDepartments={reloadDepartments}
+          />
+        </main>
       </div>
     </div>
   );
