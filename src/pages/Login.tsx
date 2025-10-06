@@ -69,7 +69,13 @@ const Login = () => {
           {loading ? "Logging in..." : "Login"}
         </button>
 
-        {error && <p className="text-center text-red-600 text-sm">{error}</p>}
+        {error && (
+          <p className="text-center text-red-600 text-sm">
+            {typeof error === "string"
+              ? error
+              : "Login failed. Please check your credentials."}
+          </p>
+        )}
 
         <p className="text-center text-sm text-gray-600">
           Don’t have an account?{" "}
