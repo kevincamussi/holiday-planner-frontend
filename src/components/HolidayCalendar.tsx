@@ -3,7 +3,7 @@
  * Right-side panel shows details for selected day.
  */
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { deleteHoliday, type Holiday } from "../api/holidays";
 import { formatLongDate } from "../utils/date";
 
@@ -26,6 +26,7 @@ const HolidayCalendar = ({
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isCardOpen, setIsCardOpen] = useState<boolean>(false);
+  const [format, setFormat] = useState<"narrow" | "short" | "long">("short");
 
   const daysMap = useMemo(() => {
     const map = new Map<string, Holiday[]>();
@@ -78,9 +79,24 @@ const HolidayCalendar = ({
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
     );
 
+  useEffect(() => {
+    const updateFormat = () => {
+      const width = window.innerWidth;
+      if (width < 640) setFormat("narrow");
+      else if (width < 1440) setFormat("short");
+      else setFormat("long");
+    };
+    updateFormat();
+    window.addEventListener("resize", updateFormat);
+    return () => window.removeEventListener("resize", updateFormat);
+  }, []);
+
   const weekDays = Array.from({ length: 7 }, (_, i) => {
     const day = new Date(1970, 0, 5 + i);
-    return day.toLocaleString("default", { weekday: "short" });
+    return {
+      key: i,
+      label: day.toLocaleDateString("default", { weekday: format }),
+    };
   });
 
   const toggleDay = (day: Date) => {
@@ -114,7 +130,7 @@ const HolidayCalendar = ({
     : [];
 
   return (
-    <div className="flex justify-between  w-full py-6 px-10 ">
+    <div className="flex justify-center lg:justify-between  w-full py-6 text-center lg:px-10 ">
       <div>
         <div className="flex justify-between w-full mb-2">
           <button
@@ -137,19 +153,29 @@ const HolidayCalendar = ({
           </button>
         </div>
 
-        <div className="grid grid-cols-7  gap-1 ">
+        <div className="grid grid-cols-7 gap-1 ">
           {weekDays.map((d) => (
-            <div key={d} className="text-center font-bold capitalize">
-              {d}
+            <div key={d.key} className="text-center font-bold capitalize">
+              {d.label}
             </div>
           ))}
 
           {monthDays.map((day) => (
             <div
               key={day.toDateString()}
-              className={`w-26 h-26 flex items-center justify-center rounded cursor-pointer ${getDayColor(
-                day
-              )}`}
+              className={`
+                w-10
+                md:w-24
+                xl:w-26  
+                h-10
+                md:h-24
+                lg:h-26 
+                flex 
+                items-center
+                justify-center
+                rounded 
+                cursor-pointer 
+                  ${getDayColor(day)}`}
               onMouseEnter={() => setHoveredDay(day)}
               onMouseLeave={() => setHoveredDay(null)}
               onClick={() => toggleDay(day)}

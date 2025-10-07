@@ -37,8 +37,13 @@ const Dashboard = () => {
   }, [loadAll]);
 
   return (
-    <div className="flex justify-center items-start min-h-screen bg-gray-200 p-4">
-      <div className="w-full max-w-3/4 ">
+    <div className="flex justify-center items-start min-h-screen bg-gray-200 py-4">
+      <div
+        className="w-full 
+          max-w-[90%]
+          lg:max-w-3/4
+        "
+      >
         <header className="justify-center text-center  flex flex-col md:flex-row md:justify-between">
           <h1 className="text-3xl font-bold mb-6">Holidays Management</h1>
           <button
