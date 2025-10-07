@@ -40,8 +40,8 @@ const Dashboard = () => {
     <div className="flex justify-center items-start min-h-screen bg-gray-200 py-4">
       <div
         className="w-full 
-          max-w-[90%]
-          lg:max-w-3/4
+         lg:px-10 
+        
         "
       >
         <header className="justify-center text-center  flex flex-col md:flex-row md:justify-between">

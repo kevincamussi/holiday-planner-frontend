@@ -21,14 +21,15 @@ const Card = ({
   return (
     <>
       {isCardOpen && (
-        <div className="border my-4 rounded-2xl flex flex-col  items-center justify-center text-center gap-2 p-2">
-          <p className="capitalize">{employeeName}</p>
-          <p className="capitalize">{`Department: ${department}`}</p>
-          <p>{`From: ${startDate}`}</p>
-          <p>{`To: ${endDate}`}</p>
+        <div className="p-3 bg-white rounded shadow-md my-2 hover:shadow-lg transition-all">
+          <p className="text-gray-800 font-semibold">{employeeName}</p>
+          <p className="text-sm text-gray-600">{department}</p>
+          <p className="text-xs text-gray-500">
+            {startDate} - {endDate}
+          </p>
           <button
             onClick={onDelete}
-            className="px-2 py-1 text-sm bg-red-500 hover:bg-red-300 text-white rounded cursor-pointer"
+            className="mt-2 w-full bg-red-500 hover:bg-red-600 text-white rounded py-1 text-sm"
           >
             Delete
           </button>

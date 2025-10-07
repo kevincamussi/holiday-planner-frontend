@@ -130,7 +130,7 @@ const HolidayCalendar = ({
     : [];
 
   return (
-    <div className="flex justify-center lg:justify-between  w-full py-6 text-center lg:px-10 ">
+    <div className="relative flex justify-center lg:justify-between  w-full py-6 text-center lg:px-10 ">
       <div>
         <div className="flex justify-between w-full mb-2">
           <button
@@ -166,10 +166,12 @@ const HolidayCalendar = ({
               className={`
                 w-10
                 md:w-24
-                xl:w-26  
+                lg:w-20
+                xl:w-28  
                 h-10
                 md:h-24
-                lg:h-26 
+                lg:h-20
+                xl:h-28 
                 flex 
                 items-center
                 justify-center
@@ -187,12 +189,12 @@ const HolidayCalendar = ({
       </div>
 
       {/* Right panel with selected day */}
-      <div>
+      <div className="">
         {isCardOpen && selectedDay && holidaysForDay.length > 0 && (
-          <div className="p-4 mt-3 rounded shadow w-80 text-center bg-gray-100">
+          <div className="p-4 mt-3 absolute right-0 rounded shadow w-full h-full md:w-70 text-center bg-gray-100">
             <strong>{selectedDay.toDateString()}</strong>
             {/* List of employees off on this day */}
-            <div>
+            <div className="mt-4">
               {holidaysForDay.map((h) => (
                 <Card
                   key={h.id}
