@@ -48,10 +48,10 @@ const HolidayForm = ({
 
   return (
     <form
-      className="flex w-full p-4 items-center gap-4 bg-gray-200 rounded "
+      className="flex flex-col md:flex-row flex-wrap w-full p-4 gap-3 bg-gray-200 rounded shadow"
       onSubmit={handleSubmit}
     >
-      <div className="relative flex-1">
+      <div className="relative flex-1 min-w-[200px]">
         <input
           autoComplete="off"
           id="employeeName"
@@ -83,7 +83,7 @@ const HolidayForm = ({
           </ul>
         )}
       </div>
-      <div className="relative flex-1 ">
+      <div className="relative flex-1 min-w-[200px]">
         <input
           autoComplete="off"
           id="department"
@@ -113,7 +113,7 @@ const HolidayForm = ({
           </ul>
         )}
       </div>
-      <div className="flex-1">
+      <div className="flex-1 min-w-[150px]">
         <input
           id="startDate"
           name="startDate"
@@ -126,7 +126,7 @@ const HolidayForm = ({
           max={"9999-12-31"}
         />
       </div>
-      <div className="flex-1">
+      <div className="flex-1 min-w-[150px]">
         <input
           id="endDate"
           name="endDate"
@@ -139,7 +139,7 @@ const HolidayForm = ({
           max={"9999-12-31"}
         />
       </div>
-      <div className="flex-1">
+      <div className="flex-1 min-w-[150px]">
         <button
           className=" w-full border rounded bg-gray-300 cursor-pointer hover:bg-blue-500 text-center py-2"
           type="submit"

@@ -39,11 +39,24 @@ const Dashboard = () => {
   return (
     <div className="flex justify-center items-start min-h-screen bg-gray-200 p-4">
       <div className="w-full max-w-3/4 ">
-        <header className="flex justify-between px-10">
+        <header className="justify-center text-center  flex flex-col md:flex-row md:justify-between">
           <h1 className="text-3xl font-bold mb-6">Holidays Management</h1>
           <button
             onClick={handleLogout}
-            className="border rounded-2xl px-4 border-red-500 bg-red-500 hover:bg-red-600 cursor-pointer  font-semibold transition-all text-white "
+            className="
+              bg-red-500 
+              hover:bg-red-600 
+              text-white 
+              font-semibold 
+              text-sm md:text-base 
+              px-3 md:px-4
+              py-2
+              mx-auto
+              md:mx-0
+              md:py-0 
+              mb-5
+              rounded 
+              transition-all"
           >
             Logout
           </button>
