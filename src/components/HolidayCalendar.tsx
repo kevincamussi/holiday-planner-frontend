@@ -189,10 +189,18 @@ const HolidayCalendar = ({
       </div>
 
       {/* Right panel with selected day */}
-      <div className="">
+      <div>
         {isCardOpen && selectedDay && holidaysForDay.length > 0 && (
           <div className="p-4 mt-3 absolute right-0 rounded shadow w-full h-full md:w-70 text-center bg-gray-100">
-            <strong>{selectedDay.toDateString()}</strong>
+            <div className="flex justify-around">
+              <strong>{selectedDay.toDateString()}</strong>
+              <button
+                onClick={() => setIsCardOpen(false)}
+                className="border rounded px-2 bg-red-500 cursor-pointer hover:bg-red-600 transition-all text-white"
+              >
+                X
+              </button>
+            </div>
             {/* List of employees off on this day */}
             <div className="mt-4">
               {holidaysForDay.map((h) => (

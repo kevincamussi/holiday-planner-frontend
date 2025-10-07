@@ -61,7 +61,8 @@ const Dashboard = () => {
               md:py-0 
               mb-5
               rounded 
-              transition-all"
+              transition-all
+              cursor-pointer"
           >
             Logout
           </button>
