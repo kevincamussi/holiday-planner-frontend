@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:8000/auth";
+// const API_URL = "http://127.0.0.1:8000/auth";
+const API_URL = "https://holiday-planner-backend-rht3.onrender.com/auth";
 
 export interface RegisterData {
   readonly name: string;
