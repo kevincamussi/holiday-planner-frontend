@@ -4,8 +4,13 @@ import axios from "axios";
 //   baseURL: "http://127.0.0.1:8000",
 // });
 
+const baseURL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:8000"
+    : "https://holiday-planner-backend-rht3.onrender.com";
+
 const API = axios.create({
-  baseURL: "https://holiday-planner-backend-rht3.onrender.com",
+  baseURL,
 });
 
 API.interceptors.request.use((config) => {
