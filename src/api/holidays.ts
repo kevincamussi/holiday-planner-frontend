@@ -10,14 +10,14 @@ export interface Holiday {
 }
 
 export const getHolidays = async (): Promise<Holiday[]> => {
-  const res = await API.get("/holidays");
+  const res = await API.get("/holidays/");
   return res.data;
 };
 
 export const createHoliday = async (
   holiday: Omit<Holiday, "id" | "days">
 ): Promise<Holiday> => {
-  const res = await API.post("/holidays", holiday);
+  const res = await API.post("/holidays/", holiday);
   return res.data;
 };
 
