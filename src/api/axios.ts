@@ -5,7 +5,7 @@ import axios from "axios";
 // });
 
 const API = axios.create({
-  baseURL: "https://holiday-planner-backend-rht3.onrender.com/",
+  baseURL: "https://holiday-planner-backend-rht3.onrender.com",
 });
 
 API.interceptors.request.use((config) => {
