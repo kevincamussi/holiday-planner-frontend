@@ -7,7 +7,7 @@ import axios from "axios";
 const baseURL =
   import.meta.env.MODE === "development"
     ? "http://localhost:8000"
-    : "https://holiday-planner-backend-rht3.onrender.com";
+    : import.meta.env.VITE_API_URL;
 
 const API = axios.create({
   baseURL,

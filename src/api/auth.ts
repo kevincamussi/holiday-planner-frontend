@@ -1,7 +1,10 @@
 import axios from "axios";
 
 // const API_URL = "http://127.0.0.1:8000/auth";
-const API_URL = "https://holiday-planner-backend-rht3.onrender.com/auth";
+const API_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:8000/auth"
+    : `${import.meta.env.VITE_API_URL}/auth`;
 
 export interface RegisterData {
   readonly name: string;
