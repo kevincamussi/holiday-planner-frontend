@@ -38,12 +38,28 @@ const HolidayForm = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await createHoliday({ employeeName, department, startDate, endDate });
-    setEmployeeName("");
-    setDepartment("");
-    setStartDate("");
-    setEndDate("");
-    onAdd();
+
+    try {
+      await createHoliday({
+        employeeName,
+        department,
+        startDate,
+        endDate,
+      });
+      setEmployeeName("");
+      setDepartment("");
+      setStartDate("");
+      setEndDate("");
+      onAdd();
+    } catch (error: any) {
+      if (error.response) {
+        alert("erro ao criar holiday");
+      } else if (error.request) {
+        alert("erro no servidor");
+      } else {
+        alert("erro ");
+      }
+    }
   };
 
   return (
