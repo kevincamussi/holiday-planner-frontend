@@ -41,12 +41,12 @@ Create a `.env` file in the project root:
 VITE_API_URL=http://localhost:8000
 
 
-git clone https://github.com/kevincamussi/holiday-planner-frontend.git
-cd holiday-planner-frontend
-npm install
-npm run dev
-Frontend will be available at:
-👉 http://localhost:5173
+git clone https://github.com/kevincamussi/holiday-planner-frontend.git  
+cd holiday-planner-frontend  
+npm install  
+npm run dev  
+Frontend will be available at:  
+👉 http://localhost:5173  
 
 📜 License
 
