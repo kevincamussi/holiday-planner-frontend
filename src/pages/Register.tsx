@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
 
 interface RegisterFormData {
@@ -17,9 +17,9 @@ const Register = () => {
     password: "",
   });
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  // const [success, setSuccess] = useState(false);
 
   const mutation = useMutation({
     mutationFn: registerUser,
@@ -118,9 +118,9 @@ const Register = () => {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={mutation.isPending}
             className={`py-2 rounded text-white transition ${
-              loading
+              mutation.isPending
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-blue-500 hover:bg-blue-600"
             }`}
