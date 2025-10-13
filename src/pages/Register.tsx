@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { data, useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
 
 interface RegisterFormData {
@@ -20,31 +21,60 @@ const Register = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
+  const mutation = useMutation({
+    mutationFn: registerUser,
+    onSuccess: () => {
+      setTimeout(() => navigate("/login"), 1000);
+    },
+    onError: (error: any) => {
+      if (error?.response?.data?.detail) {
+        const detail = error.response.data.detail;
+        const message = Array.isArray(detail)
+          ? detail.map((d: any) => d.msg).join("\n")
+          : detail;
+        setError(message);
+      } else {
+        alert("An unknown error occurred.");
+      }
+    },
+  });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(false);
-    setLoading(true);
-
-    try {
-      await registerUser(formData);
-      setSuccess(true);
-      setTimeout(() => navigate("/login"), 1000);
-    } catch (err: any) {
-      console.error("Register error:", err);
-      setError(
-        err.response?.data?.detail || "Registration failed. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
+    mutation.mutate(formData);
   };
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setError(null);
+  //   setSuccess(false);
+  //   setLoading(true);
+
+  //   try {
+  //     await registerUser(formData);
+  //     setSuccess(true);
+  //     setTimeout(() => navigate("/login"), 1000);
+  //   } catch (error: any) {
+  //     let message = "Unknown error occured.";
+  //     if (error.response) {
+  //       console.error("Register error:", error);
+  //       message = error.response.data?.detail || "Registration failed.";
+  //     } else if (error.request) {
+  //       message = "Server not responding. Please try again later.";
+  //     } else {
+  //       message = error.message || "Something went wrong.";
+  //     }
+  //     alert(message);
+  //     setError(message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-200">
       <form
@@ -54,7 +84,6 @@ const Register = () => {
         <h2 className="text-2xl font-bold text-center mb-6">
           Create an Account
         </h2>
-
         <div className="flex flex-col gap-4">
           <input
             type="text"
@@ -96,16 +125,20 @@ const Register = () => {
                 : "bg-blue-500 hover:bg-blue-600"
             }`}
           >
-            {loading ? "Registering..." : "Register"}
+            {/* {loading ? "Registering..." : "Register"} */}
+            {mutation.isPending ? "Registering..." : "Register"}
           </button>
         </div>
-
-        {error && <p className="text-red-500 text-center mt-4">{error}</p>}
+        {mutation.isError && <p className="text-red-500 mt-2">{error}</p>}
+        {mutation.isSuccess && (
+          <p className="text-green-500 mt-2">✅ Registered successfully!</p>
+        )}
+        {/* {error && <p className="text-red-500 text-center mt-4">{error}</p>}
         {success && (
           <p className="text-green-600 text-center mt-4">
             Registration successful! Redirecting...
           </p>
-        )}
+        )} */}
 
         <p className="text-center text-sm mt-6">
           Already have an account?{" "}

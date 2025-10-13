@@ -4,7 +4,6 @@
 
 import React, { useState } from "react";
 import { createHoliday } from "../api/holidays";
-// import { useSuggestions } from "../hooks/useSuggestions";
 import { useDropdownSuggestions } from "../hooks/useDropdownSuggestions";
 import { onlyLetters } from "../utils/onlyLetters";
 

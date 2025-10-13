@@ -39,9 +39,9 @@ const Dashboard = () => {
   return (
     <div className="flex justify-center items-start min-h-screen bg-gray-200 py-4">
       <div
-        className="w-full 
-         lg:px-10 
-        
+        className="w-full
+         lg:px-10
+
         "
       >
         <header className="justify-center text-center  flex flex-col md:flex-row md:justify-between">
@@ -49,18 +49,18 @@ const Dashboard = () => {
           <button
             onClick={handleLogout}
             className="
-              bg-red-500 
-              hover:bg-red-600 
-              text-white 
-              font-semibold 
-              text-sm md:text-base 
+              bg-red-500
+              hover:bg-red-600
+              text-white
+              font-semibold
+              text-sm md:text-base
               px-3 md:px-4
               py-2
               mx-auto
               md:mx-0
-              md:py-0 
+              md:py-0
               mb-5
-              rounded 
+              rounded
               transition-all
               cursor-pointer"
           >

@@ -164,7 +164,7 @@ const HolidayCalendar = ({
             <div
               key={day.toDateString()}
               className={`
-                w-10
+                  w-10
                 md:w-24
                 lg:w-20
                 xl:w-28  
@@ -176,7 +176,7 @@ const HolidayCalendar = ({
                 items-center
                 justify-center
                 rounded 
-                cursor-pointer 
+                cursor-pointer
                   ${getDayColor(day)}`}
               onMouseEnter={() => setHoveredDay(day)}
               onMouseLeave={() => setHoveredDay(null)}
@@ -189,7 +189,7 @@ const HolidayCalendar = ({
       </div>
 
       {/* Right panel with selected day */}
-      <div>
+      <aside>
         {isCardOpen && selectedDay && holidaysForDay.length > 0 && (
           <div className="p-4 mt-3 absolute right-0 rounded shadow w-full h-full md:w-70 text-center bg-gray-100">
             <div className="flex justify-around">
@@ -217,7 +217,7 @@ const HolidayCalendar = ({
             </div>
           </div>
         )}
-      </div>
+      </aside>
     </div>
   );
 };

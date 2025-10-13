@@ -13,6 +13,7 @@
     "@fullcalendar/daygrid": "^6.1.19",
     "@fullcalendar/react": "^6.1.19",
     "@tailwindcss/vite": "^4.1.12",
+    "@tanstack/react-query": "^5.90.2",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.11.0",
     "dhtmlx-gantt": "^9.0.14",
